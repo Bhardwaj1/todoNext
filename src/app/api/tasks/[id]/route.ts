@@ -8,10 +8,8 @@ function getUserIdFromReq(req: NextRequest) {
   return payload && 'userId' in payload ? (payload as any).userId : null
 }
 
-export async function GET(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
+// 👇 Notice: no manual typing of context
+export async function GET(req: NextRequest, context: any) {
   try {
     const userId = getUserIdFromReq(req)
     if (!userId) {
@@ -31,10 +29,7 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
+export async function PATCH(req: NextRequest, context: any) {
   try {
     const userId = getUserIdFromReq(req)
     if (!userId) {
@@ -64,10 +59,7 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
+export async function DELETE(req: NextRequest, context: any) {
   try {
     const userId = getUserIdFromReq(req)
     if (!userId) {
