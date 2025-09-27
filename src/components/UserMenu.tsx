@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import LogoutButton from "./LogoutButton";
 
 export default function UserMenu() {
   const [user, setUser] = useState<any>(null);
+  const pathname = usePathname(); // This will change on route changes
 
   useEffect(() => {
     async function fetchUser() {
@@ -16,10 +18,12 @@ export default function UserMenu() {
       if (res.ok) {
         const data = await res.json();
         setUser(data);
+      } else {
+        setUser(null); // Clear user if not authenticated
       }
     }
     fetchUser();
-  }, []);
+  }, [pathname]); 
 
   console.log(user);
 

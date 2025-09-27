@@ -17,7 +17,14 @@ export default function LoginPage() {
     })
     if (res.ok) {
       // token set via httpOnly cookie, redirect to dashboard
-      router.push('/dashboard')
+      router.push('/dashboard');
+      // const res= await fetch("/api/me",{
+      //   method:"GET",
+      //   headers: { 'Content-Type': 'application/json' }
+      // });
+      // if (res.ok) {
+      
+      // }
     } else {
       const data = await res.json()
       alert(data?.error || 'Login failed')

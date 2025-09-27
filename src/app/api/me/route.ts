@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getUserFromCookie } from '@/lib/auth'
+import  {getUserFromCookie}  from '@/lib/auth'
 
 export async function GET(req: NextRequest) {
   const cookieHeader = req.headers.get('cookie') || ''

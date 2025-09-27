@@ -15,9 +15,7 @@ export default function LogoutButton({ onLogout }: LogoutButtonProps) {
         credentials: 'include',
       })
       if (res.ok) {
-        // Clear client state immediately
         onLogout?.()
-        // Optionally navigate
         router.replace('/login')
       } else {
         alert('Logout failed')

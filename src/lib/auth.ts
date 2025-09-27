@@ -25,17 +25,22 @@ export function verifyToken(token: string) {
   }
 }
 
+// ✅ Add getUserFromCookie here
+import prisma from '@/lib/prisma'
 
 export async function getUserFromCookie(cookies: Record<string, string>) {
-  try {
-    const token = cookies['token'] // name of your auth cookie
-    if (!token) return null
+  const token = cookies['token']
+  if (!token) return null
 
-    const user = jwt.verify(token, JWT_SECRET)
-    return user
-  } catch (err) {
-    console.error('Invalid token', err)
+  const payload = verifyToken(token)
+  if (!payload || typeof payload !== 'object' || !('userId' in payload)) {
     return null
   }
-}
 
+  const user = await prisma.user.findUnique({
+    where: { id: payload.userId },
+    select: { id: true, name: true, email: true },
+  })
+
+  return user
+}
