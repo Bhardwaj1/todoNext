@@ -9,11 +9,18 @@ function getUserIdFromReq(req: NextRequest) {
   return payload && 'userId' in payload ? (payload as any).userId : null
 }
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+// Fix: Use the correct type for params
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     const userId = getUserIdFromReq(req)
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    const { id } = params
+    
+    const params = await context.params; // Await the params
+    const { id } = params;
+    
     const task = await prisma.task.findUnique({ where: { id } })
     if (!task || task.ownerId !== userId) return NextResponse.json({ error: 'Not found' }, { status: 404 })
     return NextResponse.json(task)
@@ -22,11 +29,17 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     const userId = getUserIdFromReq(req)
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    const { id } = params
+    
+    const params = await context.params; // Await the params
+    const { id } = params;
+    
     const existing = await prisma.task.findUnique({ where: { id } })
     if (!existing || existing.ownerId !== userId) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
@@ -44,11 +57,17 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     const userId = getUserIdFromReq(req)
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    const { id } = params
+    
+    const params = await context.params; // Await the params
+    const { id } = params;
+    
     const existing = await prisma.task.findUnique({ where: { id } })
     if (!existing || existing.ownerId !== userId) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
